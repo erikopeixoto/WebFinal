@@ -1,0 +1,76 @@
+﻿@model Modelos.Produto
+
+@{
+    ViewBag.Title = "Detalhe do Produto";
+}
+
+<h3>@ViewBag.Title</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Usuario.nmUsuario)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Usuario.nmUsuario)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Categoria.NmCategoria)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Categoria.NmCategoria)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.nmProduto)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.nmProduto)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.dsProduto)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.dsProduto)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SgUnidade)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SgUnidade)
+            </dd>
+
+           <dt>
+                @Html.DisplayNameFor(model => model.vlPreco)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.vlPreco)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.qtEstoque)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.qtEstoque)
+            </dd>
+
+        </dl>
+    </div>
+}
+<p>
+    @Html.ActionLink("Editar", "Edit", new { Pid = Model.ID }, new { @class = "btn btn-default" }) 
+    @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+</p>

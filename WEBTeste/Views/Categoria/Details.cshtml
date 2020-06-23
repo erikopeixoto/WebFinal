@@ -1,0 +1,25 @@
+﻿@model Modelos.Categoria
+
+@{
+    ViewBag.Title = "Detalhe da Categoria";
+}
+
+<h3>@ViewBag.Title</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NmCategoria)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NmCategoria)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { Pid = Model.ID }, new { @class = "btn btn-default" }) 
+    @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+</p>

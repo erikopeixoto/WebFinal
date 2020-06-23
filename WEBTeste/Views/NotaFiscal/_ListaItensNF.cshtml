@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Modelos.ItensNotaFiscal>
+
+
+@{
+    WebGrid ItensNotaFiscal = new WebGrid(Model,
+                               rowsPerPage: 10,
+                               canPage: true,
+                               ajaxUpdateContainerId: "ItensNotaFiscal");
+
+    /*
+     @{
+        ViewBag.Title = "Index";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        <style type="text/css">
+            .grid{    width:100%; }
+        </style>
+      }
+      <h2>Lista de Produtos</h2>
+      <div style="padding:7px 0;">
+      <input type="button" value="Incluir Novo Produto" onclick="OpenCreatePopup()" />
+      </div>
+
+      <div id="DivToAppendPartialView"></div>
+
+     <script type="text/javascript">
+     function EditaProduto(pid) {
+         var ph = $("#DivToAppendPartialView");
+         ph.load("/Produtos/edit?id=" + pid , function () {
+             ph.dialog({
+                 modal: true,
+                 width: 500,
+                 height: 438,
+                 title: "Edita Produto",
+                 resizable: false
+             });
+         });
+     }
+     function DeletaProduto(pid) {
+         if (confirm("Deseja deletar este produto : " + pid)) {
+             var data = { 'd': pid }
+             $.post('/Produtos/Delete', data,
+             function (data) {
+                 if (data == true)
+                     location = location.href;
+                 else
+                     alert("Não foi possível deletar");
+             });
+         }
+     }
+     function OpenCreatePopup() {
+         var div = $("#DivToAppendPartialView");
+         div.load("/Produtos/Create", function () {
+             div.dialog({
+                 modal: true,
+                 width: 500,
+                 height: 438,
+                 title: "Incluir Novo Produto",
+                 resizable: false
+             });
+         });
+     }
+     </script>
+
+
+     grid.Column("ContatoId", header: "Ação", canSort:false,
+       format: @<text>
+        @Html.Raw("<img src='/Imagens/edita.png' title='Edit' onclick='EditaProduto(" + item.Id + ")'/>") -->
+        @Html.Raw("<img src='/Imagens/deleta.png' title='Delet' onclick='DeletaProduto(" + item.Id + ")'/>")
+       </text>),
+     */
+}
+<div id="GridItens">
+    @ItensNotaFiscal.GetHtml(tableStyle: "gridTable",
+                 headerStyle: "gridHead",
+                 footerStyle: "gridFooter",
+                 rowStyle: "gridRow",
+                 alternatingRowStyle: "gridAltRow",
+                 mode: WebGridPagerModes.All,
+                 firstText: "<<",
+                 previousText: "<",
+                 nextText: ">",
+                 lastText: ">>",
+                 columns: new[]
+                          {ItensNotaFiscal.Column("NomeProduto",header: "Produto", canSort: false),
+                           ItensNotaFiscal.Column("SgUnidade",header: "UN", canSort: false),
+                           ItensNotaFiscal.Column("QtItem",header: "Quantidade", canSort: false),
+                           ItensNotaFiscal.Column("ValorUnitario",header: "Valor Unitário", canSort: false),
+                           ItensNotaFiscal.Column("",header: "Valor Total",  format: @<text><div class="total">@String.Format("{0:C}", item.VlItem)</div></text> ,canSort: false),
+                           ItensNotaFiscal.Column("", header: "Ação", canSort:false,
+                           format: @<text>
+                            @Html.Raw("<img src='/Imagens/Editar.png' title='Editar' onclick='EditarItemNF(" + item.ID + ");'/>")
+                            @Html.Raw("<img src='/Imagens/Excluir.png' title='Excluir' onclick='ExcluirItemNF(" + item.ID + ","
+                                                                                                                + Json.Encode(item.Produto.nmProduto) + ");'/>")
+                        </text>),
+                           ItensNotaFiscal.Column(format: @<text>
+        <input type="hidden" id="ID" value="@item.ID" /></text>)})
+</div>

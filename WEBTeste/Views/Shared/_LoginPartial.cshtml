@@ -1,0 +1,21 @@
+﻿@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Usuario", FormMethod.Post, new { id = "logoutForm", @class = "navbar-top" }))
+    {
+        @Html.AntiForgeryToken()
+        <ul class="nav navbar-nav">
+            <li>@Html.ActionLink("Login", "Login", "Usuario", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+    }
+}
+else
+{
+    using (Html.BeginForm("LogOff", "Usuario", FormMethod.Post, new { id = "logoutForm", @class = "navbar-top" }))
+    {
+        @Html.AntiForgeryToken()
+        <ul class="nav navbar-nav">
+            <li>@Html.ActionLink("Login", "Login", "Usuario", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+    }
+}

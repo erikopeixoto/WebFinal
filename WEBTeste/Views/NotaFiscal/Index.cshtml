@@ -1,0 +1,710 @@
+﻿@model Modelos.NotaFiscal
+
+<div class="form-horizontal">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Hidden("IDNF", Model.ID)
+        <div style="background-color:silver;background:linear-gradient(to top,silver,silver);border-radius:13px;margin-top:-10px;height:130px;box-shadow: 5px 5px 5px #AAA;">
+            <div class="container" style="margin-top:25px;margin-left:15px;">
+                <br />
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3v">
+                        @Html.LabelFor(model => model.MdNota)
+                        @Html.DropDownList("MdNota", null, htmlAttributes: new { @style = "align:left; margin-left:45px; width:60%;" })
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.LabelFor(model => model.SeNota, htmlAttributes: new { @style = "align:left" })
+                        @Html.EditorFor(model => model.SeNota, new { htmlAttributes = new { @type = "text", @size = "3" , @autofocus="true"  } })
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.LabelFor(model => model.NuNota, htmlAttributes: new { @style = "align:left" })
+                        @Html.EditorFor(model => model.NuNota, new { htmlAttributes = new { @type = "text", @size = "8", 
+                                       @style = "align:left; margin-left:20px;" } })
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.LabelFor(model => model.ClienteId, htmlAttributes: new { @style = "align:left" })
+                        @Html.EditorFor(model => model.ClienteId, new { htmlAttributes = new { @type = "text", @size = "5" } })
+                        <input type="button" value="Pesquisar" class="btn btn-warning sombra" id="BtnPesquisar" />
+                    </div>
+                </div>
+                <div class="modal-open" style="display:inline;position:relative;z-index:-1;">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.ValidationMessageFor(model => model.SeNota, "", new { @class = "text-danger", @size = "3" })
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.ValidationMessageFor(model => model.NuNota, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.ValidationMessageFor(model => model.ClienteId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="divNome" style="margin-left:890px; visibility:hidden">
+                        <input type="text" disabled id="Cliente" class="sombra" style="border:none;color:blue;background-color:silver;" size="27" />
+                    </div>
+                </div>
+                <div id="DvPesquisar" style="visibility:hidden; position:relative; display:none; z-index: 20; opacity:0.9">
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="z-index:15;position:absolute"></div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background:border-box;background-clip:border-box;z-index:25;border:solid;
+                         background-color:lightblue;height:260px;width:840px;text-align:left;margin-left:150px;position:absolute;opacity:.9;
+                         border-radius:10%;background:linear-gradient(to top,lightblue,blue);box-shadow: 5px 5px 5px #AAA;">
+                        <div class="row" style="margin-top:5px;margin-left:5px;">
+                            <div style="display:inline">
+                                <label style="color:white">Nome</label>
+                                @Html.Editor("NmCliente", new { htmlAttributes = new { @type = "text", @size = "60" } })
+                            </div>
+                            <div style="display:inline;margin-left:20px">
+                                <label style="color:white">CPF/CNPJ</label>
+                                @Html.Editor("NuCnpjCpf", new { htmlAttributes = new { @type = "text", @maxlength = "14", @size = "14" } })
+                            </div>
+                            <div style="display:inline;margin-left:40px">
+                                <input type="button" style="font-weight:bold; color:white; background-color:black" value="Buscar" class="btn btn-xs sombra" id="BtnBuscar" />
+                                <input type="button" style="font-weight:bold; color:yellow;background-color:black" value="Fechar" class="btn btn-xs sombra" id="BtnFechar" />
+                            </div>
+                        </div>
+                        <div class="row" id="grid" style="margin-left:15px">
+                        </div>
+                    </div>
+                    <div class='overlay' style="z-index:18"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <div id="DatePicker1" style="position:relative;z-index:10">
+                            @Html.LabelFor(model => model.DtMovimento)
+                            @Html.EditorFor(model => model.DtMovimento)
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.LabelFor(model => model.VlNota, htmlAttributes: new { @style = "align:left" })
+                        @Html.EditorFor(model => model.VlNota, new { htmlAttributes = new { @size = "15" } })
+                    </div>
+
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        @Html.LabelFor(model => model.NuChaveAcesso, htmlAttributes: new { @style = "align:left" })
+                        @Html.EditorFor(model => model.NuChaveAcesso, new
+           {
+               htmlAttributes = new
+               {
+                   @type = "text",
+                   @maxlength = "44",
+                   @size = "40",
+                   @style = "align:left; width: 70%;max-width: 70%;"
+               }
+           })
+                    </div>
+                </div>
+                <div class="modal-open" style="display:inline;position:relative;z-index:15">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.ValidationMessageFor(model => model.DtMovimento, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        @Html.ValidationMessageFor(model => model.VlNota, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        @Html.ValidationMessageFor(model => model.NuChaveAcesso, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="DvItens" style="visibility:hidden; position:center; z-index: 10;">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:center">
+                <input id="btnIncluirItens" type="button" value="Incluir Itens" style="border:solid;text-align:center;border-radius:15%;" class="btn btn-primary sombra" />
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="GrupoItem" style="height:380px;background-color:lightgrey;width:1050px;
+                 text-align:center;margin-left:50px;z-index:12;position:center;border-radius:15%;background:linear-gradient(to top,lightgrey,grey);
+                 box-shadow: 5px 5px 5px #AAA;">
+                <div id="GridItens" class="modal-Open-Niv1" style="margin-top:20px;left:7%;margin-left:7%;border-radius:15%;">
+                </div>
+                <div id="TelaItens" class="modal-Open-Niv2" style="height:274px;width:90%;text-align:left;left:2%;margin-left:2%;
+                     background-color:azure;margin-left:40px;margin-top:25px;border-radius:15%;box-shadow: 5px 5px 5px #AAA;">
+                </div>
+                <div style="position:absolute;margin-top:34%;margin-left:21%;left:21%">
+                    <label>Total de Itens</label>
+                    <label id="TotalItens"></label>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div style="text-align:center;width:250px;height:70px;left:50%;position:relative;margin-left:-125px;
+             background-color:lightgrey;background:linear-gradient(to top,lightgrey,grey);border-radius:13px;box-shadow: 5px 5px 5px #AAA;">
+            <br />
+            <input type="button" value="Salvar" onclick="SalvarNF();" class="btn btn-success sombra" />
+            <input type="button" id="btnExcluirNF" value="Excluir" onclick="ExcluirNF();" style="visibility:hidden;" class="btn btn-danger sombra">
+            <input type="reset" id="btnLimparNF" value="Limpar" class="btn btn-default sombra" style="background-color:lightslategray" />
+        </div>
+    }
+</div>
+
+@section scripts{
+    <script src="~/Scripts/knockout-3.3.0.js"></script>
+
+    <script type="text/javascript">
+
+        function ItensNF() {
+            this.ID = 0;
+            ProdutoID = 0;
+            NotaFiscalID = 0;
+            QtItem = 0;
+            VlItem = 0;
+            SgUnidade = "";
+        }
+
+        function NotaFiscal() {
+            this.ID = 0;
+            MdNota = 0;
+            SeNota = 0;
+            NuNota = 0;
+            ClienteId = 0;
+            DtMovimento = "";
+            NuChaveAcesso = "";
+            CPFCNPJFormatado = "";
+        }
+
+        $.ajaxSetup({
+            async: false,
+            cache: false
+        });
+
+        function LeElementos() {
+            var NuNota = document.getElementById("NuNota");
+            var ClienteId = document.getElementById("ClienteId");
+            var NuChaveAcesso = document.getElementById("NuChaveAcesso");
+            var SeNota = document.getElementById("SeNota");
+            var MdNota = document.getElementById("MdNota");
+            var VlNota = document.getElementById("VlNota");
+            var IDNF = document.getElementById("IDNF");
+            var DtMovimento = document.getElementById("DtMovimento");
+        }
+
+        $(function ($) {
+            $('#NuNota').mask('999999999');
+            $('#NuNota').val('');
+            $('#ClienteId').val('');
+            $('#NuChaveAcesso').mask('99999999999999999999999999999999999999999999');
+            $('#NuChaveAcesso').val('');
+            $('#SeNota').mask('999');
+            $('#SeNota').val('');
+            $('#ClienteId').mask('999999');
+            $('#NuCnpjCpf').mask('99999999999999');
+
+            $("input").keypress(function (e) {
+                var tecla = (e.keyCode ? e.keyCode : e.which);
+                if (tecla === 13) {
+                    campo = $("input");
+                    indice = campo.index(this);
+                    if (campo[indice + 1] != null) {
+                        proximo = campo[indice + 1];
+                        proximo.focus();
+                        e.preventDefault(e);
+                        return false;
+                    }
+                }
+            });
+
+            $('#NuNota').focusout(function () {
+                var nota, element;
+                element = $(this);
+                element.unmask();
+                nota = element.val().replace(/\D/g, '').trim();
+                if (nota > 0) {
+                    BuscarNotaFiscal();
+                    element.val(ajustarZeros(element.val(), 9));
+                    element.mask('999999999');
+                }
+            }).trigger('focusout');
+
+            $('#SeNota').change(function () {
+                var serie, element;
+                element = $(this);
+                element.unmask();
+                serie = element.val().replace(/\D/g, '').trim();
+                if (serie > 0) {
+                    $('NuNota').val('');
+                    BuscarNotaFiscal();
+                    element.val(ajustarZeros(element.val(), 3));
+                    element.mask('999');
+                }
+            }).trigger('change');
+
+            $('#MdNota').change(function () {
+                var serie, element;
+                element = $(this);
+                element.unmask();
+                modelo = element.val().replace(/\D/g, '').trim();
+                if (modelo > 0) {
+                    $('#NuNota').val('');
+                    BuscarNotaFiscal();
+                }
+            }).trigger('change');
+
+            $('#ClienteId').focusout(function () {
+                var Id, element;
+                element = $(this);
+                element.unmask();
+                Id = element.val().replace(/\D/g, '').trim();
+                if (Id > 0) {
+                    $('#NmCliente').val('');
+                    $('#NuCnpjCpf').val('');
+                    BuscarClientes();
+                    element.val(ajustarZeros(element.val(), 6));
+                    element.mask('999999');
+                }
+            }).trigger('focusout');
+
+            //$("#VlNota").mask("#.###.##0,00", { reverse: true });
+            $("#VlNota").maskMoney({
+                symbol: "R$",
+                thousands: ".",
+                decimal: ","
+            });
+            $('#VlNota').val('');
+
+            $('#BtnPesquisar').click(function () {
+                $("#grid").load(null);
+                $('#DvPesquisar').css('display', 'inline');
+                $('#DvPesquisar').css('visibility', 'visible');
+            })
+
+            $('#BtnFechar').click(function () {
+                $('#DvPesquisar').css('visibility', 'hidden');
+                $('#DvPesquisar').css('display', 'none');
+            })
+
+            $('#BtnBuscar').click(function () {
+                BuscarClientes();
+            })
+
+            var btnLimpar = document.getElementById("btnLimparNF");
+            btnLimpar.addEventListener("click", LimparNF);
+
+            var btnIncluirItens = document.getElementById("btnIncluirItens");
+            btnIncluirItens.addEventListener("click", IncluirItensNF);
+        });
+
+        function BuscarNotaFiscal() {
+
+            if ($('#NuNota').val() > 0 &&
+                $('#SeNota').val() > 0 &&
+                $('#MdNota').val() > 0) {
+                $.getJSON("/NotaFiscal/LerNotaFiscal/", {
+                    NuNota: $("#NuNota").val(),
+                    SeNota: $("#SeNota").val(),
+                    MdNota: $("#MdNota").val()
+                },
+                function (notaFiscal, Status, jqXHR) {
+                    if (notaFiscal.NmCliente != "") {
+                        $("#btnExcluirNF").css('visibility', 'visible');
+                        $("#NuNota").prop('disabled', true);
+                        $("#SeNota").prop('disabled', true);
+                        $("#MdNota").prop('disabled', true);
+                        $("#NuChaveAcesso").val(notaFiscal.NuChaveAcesso);
+                        $("#VlNota").val(notaFiscal.VlNota);
+                        $("#ClienteId").val(notaFiscal.ClienteId);
+                        $("#Cliente").val(notaFiscal.CPFCNPJFormatado + " " + notaFiscal.NmCliente);
+                        $("#IDNF").val(notaFiscal.NFID);
+                        $('#divNome').css('visibility', 'visible');
+                        BuscarItensNotaFiscal();
+                    }
+                    else {
+                        $("#IDNF").val(0);
+                        $("#btnExcluirNF").css('visibility', 'hidden');
+                    }
+                });
+                /*
+                var par = {NuNota: $("#NuNota").val(),
+                           SeNota: $("#SeNota").val(),
+                           MdNota: $("#MdNota").val()};
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/NotaFiscal/LerNotaFiscal',
+                    data: JSON.stringify(par),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (NF) {
+                        alert(NF);
+                        $('#id').text(NF.employee.Id);
+                        $('#firstName').text(NF.employee.FirstName);
+                        $('#lastName').text(NF.employee.LastName);
+                    },
+                    error: function (erro) {
+                        alert(erro.responseJSON);
+                    }
+                });
+                */
+            }
+            else {
+                if ($('#SeNota').val() > 0 &&
+                    $('#MdNota').val() > 0) {
+                    $.get("/NotaFiscal/LerNumeroNF", {
+                        SeNota: $("#SeNota").val(),
+                        MdNota: $("#MdNota").val()
+                    },
+                    function (NumeroNF) {
+                        if (NumeroNF != null) {
+                            $("#IDNF").val(0);
+                            $("#NuNota").val(NumeroNF);
+                        }
+                    }
+                );
+                }
+            }
+        }
+
+        function SalvarNF() {
+            var Nota = new NotaFiscal();
+            var retorno;
+
+            Nota.ID = $('#IDNF').val();
+            Nota.MdNota = $('#MdNota').val();
+            Nota.SeNota = $('#SeNota').val();
+            Nota.NuNota = $('#NuNota').val();
+            Nota.VlNota = $('#VlNota').val().replace('.', '');
+            Nota.ClienteId = $('#ClienteId').val();
+            Nota.DtMovimento = $('#DtMovimento').val();
+            Nota.NuChaveAcesso = $('#NuChaveAcesso').val();
+            $.ajax({
+                url: "@Url.Action("SalvarNF", "NotaFiscal")",
+                data: JSON.stringify({ notaFiscal: Nota }),
+                async: false,
+                type: "post",
+                contentType: "application/json",
+                success: function (retornoResponse) {
+                    retorno = retornoResponse;
+                }
+            }).done(function () {
+                alert(retorno.Codigo + "-" + retorno.Descricao);
+                if (retorno.Codigo != 0) {
+                    $('#IDNF').val(retorno.Codigo);
+                    BuscarItensNotaFiscal();
+                }
+            });
+
+        }
+
+        function ExcluirNF() {
+
+            var retorno;
+            var conf = confirm("Confirma a exlusão da Nota Fiscal ");
+
+            var pIDNF;
+            pIDNF = $("#IDNF").val();
+
+            if (conf) {
+                $.ajax({
+                    url: "@Url.Action("ExcluirNF", "NotaFiscal")",
+                    data: JSON.stringify({ pIDNF: pIDNF }),
+                    async: false,
+                    type: "post",
+                    contentType: "application/json",
+                    success: function (retornoResponse) {
+                        retorno = retornoResponse;
+                    }
+                }).done(function () {
+                    alert(retorno.Codigo + "-" + retorno.Descricao);
+                    if (retorno.Codigo == 0) {
+                        LimparNF();
+                    }
+                });
+            }
+        }
+
+        function BuscarClientes() {
+            var pNmCliente = $('#NmCliente').val();
+            var pNuCnpjCpf = $('#NuCnpjCpf').val();
+
+            if (pNmCliente == null)
+                pNmCliente = "";
+
+            if (pNmCliente == "" &&
+                pNuCnpjCpf == "") {
+                $.get("@Url.Action("ObterNome","Cliente")", {
+                    Pid: $("#ClienteId").val()
+                },
+                    function (Cliente) {
+                        if (Cliente != "") {
+                            $("#Cliente").val(Cliente);
+                            $('#divNome').css('visibility', 'visible');
+                        }
+                        else {
+                            alert("Cliente não encontrado.");
+                            $("#ClienteId").val('');
+                        }
+                    });
+            }
+            else {
+                pNmCliente = pNmCliente.replace(' ', '%');
+                $("#grid").load("/NotaFiscal/Clientes?pNmCliente=" + pNmCliente + "&pNuCnpjCpf=" + pNuCnpjCpf);
+            }
+        }
+
+        function ajustarZeros(str, tam) {
+            var nuZeros = tam - str.length;
+            for (var i = 0; i < nuZeros; i++) str = '0' + str;
+            return str;
+        }
+
+        function LimparNF() {
+            FecharTelaItemNF();
+            $("#btnExcluirNF").css('visibility', 'hidden');
+            $("#NuNota").prop('disabled', false);
+            $("#SeNota").prop('disabled', false);
+            $("#MdNota").prop('disabled', false);
+            $("#ClienteId").prop('disabled', false);
+            $("#ClienteId").val('');
+            $("#NuNota").val('');
+            $("#SeNota").val('');
+            $("#MdNota").val('');
+            $("#VlNota").val('');
+            $("#NuChaveAcesso").val('');
+            $("#Cliente").val('');
+            $('#GridItens').css('display', 'none');
+            $('#GridItens').css('visibility', 'hidden');
+            $('#DvItens').css('visibility', 'hidden');
+            $('#divNome').css('visibility', 'hidden');
+            return false;
+        }
+
+        function atualizarCliente(pId, pNome, pNuCpfCnpjFormatado) {
+            $("#ClienteId").val(pId);
+            $("#Cliente").val(pNuCpfCnpjFormatado + " " + pNome);
+            $('#divNome').css('visibility', 'visible');
+            $("#BtnFechar").click();
+        }
+
+        // Funçoes dos itens da NF
+
+        function BuscarItensNotaFiscal() {
+            var pIDNF;
+            $('#DvItens').css('display', 'inline');
+            $('#DvItens').css('visibility', 'visible');
+            $('#GridItens').css('display', 'inline-flex');
+            $('#GridItens').css('visibility', 'visible');
+
+            pIDNF = $("#IDNF").val();
+            $("#GridItens").load("/NotaFiscal/ListarItensNF?pNFID=" + pIDNF);
+            ValorTotalItens();
+        }
+
+        function IncluirItensNF() {
+            $("#ID").val(0);
+            $("#TelaItens").load("/NotaFiscal/IncluirItens");
+            $('#TelaItens').css('display', 'inline');
+            $('#TelaItens').css('visibility', 'visible');
+        }
+
+        function EditarItemNF(pID) {
+            var VlPreco = 0, VlItem = 0;
+
+            $("#TelaItens").load("/NotaFiscal/EditarItens?pID=" + pID);
+            VlPreco = parseFloat($("#Produto_vlPreco").val().replace(',', '.'));
+            VlItem = parseFloat($("#VlItem").val().replace(',', '.'));
+
+            $("#ID").val(pID);
+            $("#VlPrecoProd").val(formataReal(VlPreco));
+            $("#VlTotalFormatado").val(formataReal(VlItem));
+            $('#TelaItens').css('display', 'inline');
+            $('#TelaItens').css('visibility', 'visible');
+        }
+
+        function BuscarProdutos() {
+            var pNome = $('#NomeProduto').val();
+            var Produto, VlPreco;
+
+            if (pNome == null)
+                pNome = "";
+            if (pNome == "") {
+                /*
+                $.getJSON("/NotaFiscal/ObterProduto/", {
+                    pID: $("#ProdutoID").val()
+                }, function (Produto, Status, jqXHR) {
+                    if (Produto.NomeProduto != "") {
+                        $('#divNomeProduto').css('visibility', 'visible');
+                        $("#NomeDOProduto").val(Produto.NomeProduto);
+                        $("#DsUnidade").val(Produto.Unidade);
+                        $("#vlPreco").val(Produto.Preco);
+                        $("#SgUnidade").val(Produto.SgUnidade);
+                        $("#QtItem").focus();
+                    }
+                    else {
+                        alert("Produto não encontrado.");
+                        LimparItens();
+                        $("#ProdutoID").focus();
+                    }
+                });
+                */
+
+                $.ajax({
+                    url: "@Url.Action("ObterProduto", "NotaFiscal")",
+                    data: JSON.stringify({ pID: $("#ProdutoID").val() }),
+                    async: false,
+                    type: "post",
+                    contentType: "application/json",
+                    success: function (retornoResponse) {
+                        Produto = retornoResponse;
+                    }
+                }).done(function () {
+                    if (Produto.NomeProduto != "") {
+                        $('#divNomeProduto').css('visibility', 'visible');
+                        $("#NomeDOProduto").val(Produto.NomeProduto);
+                        $("#Unidade_DsUnidade").val(Produto.Unidade);
+                        $("#Produto_vlPreco").val(Produto.Preco);
+                        $("#VlPrecoProd").val(formataReal(Produto.Preco));
+                        $("#SgUnidade").val(Produto.SgUnidade);
+                        $("#QtItem").focus();
+                    }
+                    else {
+                        alert("Produto não encontrado.");
+                        LimparItens();
+                        $("#ProdutoID").focus();
+                    }
+                });
+
+            }
+            else {
+                pNome = pNome.replace(' ', '%');
+                $("#gridProd").load("/NotaFiscal/Produtos?pNmProduto=" + pNome);
+            }
+        }
+
+        function LimparItens() {
+
+            $("#ProdutoID").val('');
+            $("#NomeDOProduto").val('');
+            $("#Produto_vlPreco").val('');
+            $("#VlPrecoProd").val('');
+            $("#Unidade_DsUnidade").val('');
+            $('#QtItem').val('');
+            $('#VlItem').val('');
+            $('#VlTotalFormatado').val('');
+            $('#SgUnidade').val('');
+            $("#ID").val(0);
+        }
+
+        function atualizarProduto(pId, pNome, pUnidade, pSgUnidade, pVlPreco) {
+            $("#ProdutoID").val(pId);
+            $("#NomeDOProduto").val(pNome);
+            $("#Produto_vlPreco").val(pVlPreco);
+            $("#VlPrecoProd").val(formataReal(pVlPreco));
+            $("#Unidade_DsUnidade").val(pUnidade);
+            $('#SgUnidade').val(pSgUnidade);
+            $('#divNomeProduto').css('visibility', 'visible');
+            $("#BtnFecharProd").click();
+        }
+
+        function FecharTelaItemNF() {
+            $('#DvPesqProduto').css('visibility', 'hidden');
+            $('#DvPesqProduto').css('display', 'none');
+            $('#divNomeProduto').css('visibility', 'hidden');
+            $('#TelaItens').css('visibility', 'hidden');
+            $('#GridItens').css('display', 'inline');
+        }
+
+        function SalvarItemNF() {
+            var item = new ItensNF();
+            var retorno;
+
+            item.ProdutoID = $('#ProdutoID').val();
+            item.NotaFiscalID = $('#IDNF').val();
+            item.QtItem = $('#QtItem').val();
+            item.SgUnidade = $('#SgUnidade').val();
+            item.ID = $('#ID').val();
+            item.VlItem = $('#VlItem').val().replace('.', ',');
+
+            if (isNullOrEmpty(item.ProdutoID) ||
+                isNullOrEmpty(item.QtItem) ||
+                isNullOrEmpty(item.VlItem))
+            {
+                alert("Faltam dados do item da NF.");
+                return;
+            }
+
+            $.ajax({
+                url: "@Url.Action("SalvarItem", "NotaFiscal")",
+                data: JSON.stringify({ item: item }),
+                async: false,
+                type: "post",
+                contentType: "application/json",
+                success: function (retornoResponse) {
+                    retorno = retornoResponse;
+                }
+            }).done(function () {
+                alert(retorno.Codigo + "-" + retorno.Descricao);
+                if (retorno.Codigo == 0) {
+                    BuscarItensNotaFiscal();
+                    if ($("#ID").val() > 0)
+                        LimparItens();
+                    else
+                        FecharTelaItemNF();
+                }
+            });
+
+        }
+
+        function ExcluirItemNF(pID, pNOME) {
+
+            var retorno;
+            var conf = confirm("Confirma a exlusão do item " + pNOME);
+
+            if (conf) {
+                $.ajax({
+                    url: "@Url.Action("ExcluirItem", "NotaFiscal")",
+                    data: JSON.stringify({ pitem: pID }),
+                    async: false,
+                    type: "post",
+                    contentType: "application/json",
+                    success: function (retornoResponse) {
+                        retorno = retornoResponse;
+                    }
+                }).done(function () {
+                    alert(retorno.Codigo + "-" + retorno.Descricao);
+                    if (retorno.Codigo == 0) {
+                        BuscarItensNotaFiscal();
+                    }
+                });
+            }
+        }
+
+        function formataReal(value) {
+            return "R$ " + value.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+        }
+
+        function moneyTextToFloat(text) {
+            var cleanText = text.replace("R$", "").replace(".", "").replace(",", ".");
+            return parseFloat(cleanText);
+        }
+
+        function ValorTotalItens() {
+            var total = 0;
+            var lista = document.getElementsByClassName("gridRow");
+            var listaAlt = $(".gridAltRow");
+            for (var pos = 0; pos < lista.length; pos++) {
+                var valorItem = lista[pos].getElementsByClassName("total");
+                total += moneyTextToFloat(valorItem[0].innerHTML);
+            }
+            for (var pos = 0; pos < listaAlt.length; pos++) {
+                var $valorItem = $(listaAlt[pos]);
+                total += moneyTextToFloat($valorItem.find(".total").text());
+            }
+            $("#TotalItens").text(formataReal(total));
+        }
+
+        function isNullOrEmpty(value) {
+            var isNullOrEmpty = true; 
+            if (value) { 
+               if (typeof (value) == 'string') { 
+                   if (value.length > 0) 
+                       isNullOrEmpty = false; 
+               } 
+            } 
+            return isNullOrEmpty; 
+        }
+
+    </script>
+}

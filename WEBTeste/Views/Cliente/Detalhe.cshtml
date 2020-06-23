@@ -1,0 +1,61 @@
+﻿@model Modelos.Cliente
+
+@{
+    ViewBag.Title = "Detalhe do Cliente";
+}
+<h3>@ViewBag.Title</h3>
+<hr />
+<div>
+    <dl class="form-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NmCliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NmCliente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DsEndereco)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DsEndereco)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NuCep)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NuCep)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NuCnpjCpf)
+        </dt>
+
+        <dd>
+           @if (Model.TpCliente == "F")
+           { 
+               @Html.ValueFor(model =>model.NuCnpjCpf, "{0:000\\.000\\.###\\-##}");
+           }
+           else
+           { 
+               @Html.ValueFor(model => model.NuCnpjCpf, "{0:00\\.\\000\\.\\000\\/\\000#\\-##}");
+           }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DtCriacao)
+        </dt>
+
+        <dd>
+            @Html.ValueFor(model => model.DtCriacao, "{0:dd/MM/yyyy}")
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { Pid = Model.ID }, new { @class = "btn btn-default" }) 
+    @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default btn-md" })
+</p>

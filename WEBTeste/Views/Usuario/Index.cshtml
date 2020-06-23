@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Modelos.Usuario>
+
+@{
+    ViewBag.Title = "Usuário";
+}
+
+<h2>@ViewBag.Title</h2>
+<table class="table table-bordered">
+    <caption>Lista de Usuários</caption>
+    <thead>
+        <tr>
+            <th width="350">
+                @Html.DisplayNameFor(model => model.nmUsuario)
+            </th>
+            <th width="300">
+                @Html.DisplayNameFor(model => model.dsEmail)
+            </th>
+            <th width="100">
+                @Html.DisplayNameFor(model => model.dsSenha)
+            </th>
+            <th colspan="3">Funções</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.nmUsuario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dsEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dsSenha)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+            </td>
+            <td>
+                @Html.ActionLink("Detalhe", "Details", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+            </td>
+            <td>
+                @Html.ActionLink("Excluir", "Delete", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>
+    @Html.ActionLink("Incluir", "Create", null, new { @class = "btn btn-default btn-lg" })
+</p>

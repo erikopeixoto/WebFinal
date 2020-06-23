@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Modelos.Produto>
+
+@{
+    ViewBag.Title = "Produto por Categoria:  " + @ViewBag.NomeCategoria;
+}
+
+<h3>@ViewBag.Title</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th width="300">
+                @Html.DisplayNameFor(model => model.nmProduto)
+            </th>
+            <th width="300">
+                @Html.DisplayNameFor(model => model.dsProduto)
+            </th>
+            <th width="150">
+                @Html.DisplayNameFor(model => model.SgUnidade)
+            </th>
+            <th width="120">
+                @Html.DisplayNameFor(model => model.qtEstoque)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.vlPreco)
+            </th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.nmProduto)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.dsProduto)
+            </td>
+            <td align="center">
+                @Html.DisplayFor(model => item.SgUnidade)
+            </td>
+            <td align="center">
+                @Html.DisplayFor(model => item.qtEstoque)
+            </td>
+            <td align="right">
+                @Html.DisplayFor(model => item.vlPreco)
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div>
+    @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default btn-lg"})
+</div>
+

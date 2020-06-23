@@ -1,0 +1,29 @@
+﻿@model Modelos.Categoria
+
+@{
+    ViewBag.Title = "Excluir Categoria";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NmCategoria)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NmCategoria)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Confirmar" class="btn btn-default" /> 
+            @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

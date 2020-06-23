@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Modelos.Cliente>
+
+
+@{
+    Layout = null;
+    WebGrid grid = new WebGrid(Model,
+                               rowsPerPage: 6,
+                               canPage: true,
+                               ajaxUpdateContainerId: "grid");
+
+        /*
+         @{
+            ViewBag.Title = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+            <style type="text/css">
+                .grid{    width:100%; }
+            </style>
+          }
+          <h2>Lista de Produtos</h2>
+          <div style="padding:7px 0;">
+          <input type="button" value="Incluir Novo Produto" onclick="OpenCreatePopup()" />
+          </div>
+          
+          <div id="DivToAppendPartialView"></div>
+         
+         <script type="text/javascript">
+         function EditaProduto(pid) {
+             var ph = $("#DivToAppendPartialView");
+             ph.load("/Produtos/edit?id=" + pid , function () {
+                 ph.dialog({
+                     modal: true,
+                     width: 500,
+                     height: 438,
+                     title: "Edita Produto",
+                     resizable: false
+                 });
+             });
+         }
+         function DeletaProduto(pid) {
+             if (confirm("Deseja deletar este produto : " + pid)) {
+                 var data = { 'd': pid }
+                 $.post('/Produtos/Delete', data,
+                 function (data) {
+                     if (data == true)
+                         location = location.href;
+                     else
+                         alert("Não foi possível deletar");
+                 });
+             }
+         }
+         function OpenCreatePopup() {
+             var div = $("#DivToAppendPartialView");
+             div.load("/Produtos/Create", function () {
+                 div.dialog({
+                     modal: true,
+                     width: 500,
+                     height: 438,
+                     title: "Incluir Novo Produto",
+                     resizable: false
+                 });
+             });
+         }
+         </script>
+    
+     
+         grid.Column("ContatoId", header: "Ação", canSort:false,
+           format: @<text>
+            @Html.Raw("<img src='/Imagens/edita.png' title='Edit' onclick='EditaProduto(" + item.Id + ")'/>") -->
+            @Html.Raw("<img src='/Imagens/deleta.png' title='Delet' onclick='DeletaProduto(" + item.Id + ")'/>")
+           </text>),
+         */
+}
+<div id="grid">
+    @grid.GetHtml(tableStyle: "gridTablePesq",
+                 headerStyle: "gridHeadPesq",
+                 footerStyle: "gridFooterPesq",
+                 rowStyle: "gridRowPesq",
+                 alternatingRowStyle: "gridAltRowPesq",
+                 mode: WebGridPagerModes.All,
+                 firstText: "<<",
+                 previousText: "<",
+                 nextText: ">",
+                 lastText: ">>",
+                 columns: new[]
+                          {grid.Column("NmCliente",header: "Nome",format: (item) => 
+                              new HtmlString("<a href='#' id='test' onclick='atualizarCliente(" + item.ID + ","+ 
+                                                                                                Json.Encode(item.NmCliente) + "," +
+                                                                                                Json.Encode(item.CPFCNPJFormatado) + ");'>" + 
+                              Html.Encode(item.NmCliente) + "</a>")),
+                           grid.Column("CPFCNPJFormatado","CNPJ/CPF", canSort: false),
+                           grid.Column("TpCliente", "Tipo", canSort: false),
+                           grid.Column(format: @<text>
+                            <input type="hidden" id="ID" value="@item.ID" /></text>)})
+</div>

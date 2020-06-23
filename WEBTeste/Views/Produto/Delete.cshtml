@@ -1,0 +1,69 @@
+﻿@model Modelos.Produto
+
+@{
+    ViewBag.Title = "Excluir Produto";
+}
+
+<h3>@ViewBag.Title</h3>
+<div>
+    <hr />
+    <dl class="form-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Usuario.nmUsuario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Usuario.nmUsuario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Categoria.NmCategoria)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Categoria.NmCategoria)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nmProduto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nmProduto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsProduto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsProduto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.vlPreco)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.vlPreco)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qtEstoque)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qtEstoque)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Confirmar" class="btn btn-default" />
+            @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

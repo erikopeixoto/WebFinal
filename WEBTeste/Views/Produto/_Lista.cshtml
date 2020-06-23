@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Modelos.Produto>
+@{
+    WebGrid grid = new WebGrid(rowsPerPage: 4, defaultSort: "nmProduto", ajaxUpdateContainerId: "grid");
+    grid.Bind(Model, autoSortAndPage: true);
+    grid.Pager(WebGridPagerModes.All);
+    @grid.GetHtml(htmlAttributes: new { id = "grid" },
+            fillEmptyRows: false,
+            mode: WebGridPagerModes.Numeric,
+            columns: new[] {
+                grid.Column("nmProduto", header:"Nome"),
+                grid.Column("SgUnidade", header:"Unidade"),
+                grid.Column("qtEstoque", header:"Estoque"),
+                grid.Column("vlPreco", header:"Preço"),
+            });
+}

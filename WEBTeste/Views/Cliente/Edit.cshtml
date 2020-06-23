@@ -1,0 +1,125 @@
+﻿@model Modelos.Cliente
+
+@{
+    ViewBag.Title = "Editar Cliente";
+}
+
+<h3>@ViewBag.Title</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@ViewBag.Message</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.DtCriacao)
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.NmCliente, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NmCliente, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NmCliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.DsEndereco, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DsEndereco, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DsEndereco, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.NuCep, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("NuCep", new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.TpCliente, "Tipo", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("TpCliente", null, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.NuCnpjCpf, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("NuCnpjCpf", new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.NuTelefone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("NuTelefone", new { htmlAttributes = new { @class = "form-control", @MaxLength = "16", @type = "text" } })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.DtCriacao, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ValueFor(model => model.DtCriacao, "{0:dd/MM/yyyy}")
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salvar" class="btn btn-default" />
+                @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default btn-md" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $(function ($) {
+            $('#NuCnpjCpf').before(function () {
+                if ($('#TpCliente').val() == 'F') {
+                    $('#NuCnpjCpf').val(ajustarZeros($('#NuCnpjCpf').val(), 11));
+                    $('#NuCnpjCpf').mask('999.999.999-99');
+                } else {
+                    $('#NuCnpjCpf').val(ajustarZeros($('#NuCnpjCpf').val(), 14));
+                    $('#NuCnpjCpf').mask('99.999.999/9999-99');
+                }
+            });
+            $('#NuCep').mask('99999-999');
+            //Quando a pessoa alternar entra 'Pessoa Fisica' e 'Pessoa Juridica' dispara o evento change() e altera a mascara
+            $('#TpCliente').change(function () {
+                if ($('#TpCliente').val() == 'F') {
+                    $('#NuCnpjCpf').val('');
+                    $('#NuCnpjCpf').mask('999.999.999-99');
+                } else {
+                    $('#NuCnpjCpf').val('');
+                    $('#NuCnpjCpf').mask('99.999.999/9999-99');
+                }
+            });
+            /*
+            $('#NuTelefone').focusin(function () {
+                $('#NuTelefone').mask('(99) 99999999?9');
+            });
+            */
+            $('#NuTelefone').focusout(function () {
+                var phone, element;
+                element = $(this);
+                element.unmask();
+                phone = element.val().replace(/\D/g, '');
+                element.mask('(99) 99999-9999');
+            }).trigger('focusout');
+        });
+
+        function ajustarZeros(str, tam) {
+            var nuZeros = tam - str.length;
+            for (var i = 0; i < nuZeros; i++) str = '0' + str;
+            return str;
+        }
+
+    </script>
+}

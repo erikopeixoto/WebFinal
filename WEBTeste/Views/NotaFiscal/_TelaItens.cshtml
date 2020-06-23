@@ -1,0 +1,147 @@
+﻿@model Modelos.ItensNotaFiscal
+
+@{
+    Layout = null;
+}
+
+<div id="TelaItens">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.SgUnidade)
+        <div style="margin-top:20px; margin-left:20px">
+            <div class="row">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    @Html.LabelFor(model => model.ProdutoID, htmlAttributes: new { @style = "align:left" })
+                    @Html.EditorFor(model => model.ProdutoID, new { htmlAttributes = new { @type = "text", @size = "7", @autofocus="true",
+                                   @style = "align:left; margin-left:25px" } })
+                    <input type="button" value="Pesquisar" class="btn btn-warning sombra" id="BtnPesqProduto" />
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    @Html.Label("Unidade", htmlAttributes: new { @style = "align:left", @size = "15" })
+                    @Html.EditorFor(model => model.Unidade.DsUnidade, new { htmlAttributes = new { @disabled = "true" } })
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    @Html.LabelFor(model => model.Produto.vlPreco, htmlAttributes: new { @style = "align:left", @size = "15" })
+                    @Html.Editor("VlPrecoProd", new { htmlAttributes = new { @disabled = "true" } })
+                    @Html.HiddenFor(model => model.Produto.vlPreco)
+                </div>
+            </div>
+            <div class="row">
+                <div id="divNomeProduto" style="margin-left:99px; visibility:hidden;">
+                    <input type="text" readonly id="NomeDOProduto" style="border:none;color:blue;background-color:azure" />
+                </div>
+            </div>
+           <div class="row">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    @Html.LabelFor(model => model.QtItem, htmlAttributes: new { @style = "align:left" })
+                    @Html.EditorFor(model => model.QtItem)
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    @Html.LabelFor(model => model.VlItem, htmlAttributes: new { @style = "align:left" })
+                    @Html.Editor("VlTotalFormatado", new
+           {
+               htmlAttributes = new
+               {
+                   @type = "text",
+                   @disabled = "true",
+                   @size = "10",
+                   @style = "align:left; margin-left:20px"
+               }
+           })
+                    @Html.HiddenFor(model => model.VlItem)
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+
+            </div>
+           <div id="DvPesqProduto" style="visibility:hidden; display:none; opacity:0.9">
+                <div style="background:border-box;background-clip:border-box;z-index:30;border:solid;border-radius:15%;box-shadow: 5px 5px 5px #AAA;
+                 background-color:lightblue;height:220px;width:800px;text-align:left;margin-top:-70px; margin-left:40px;position:absolute;opacity:.9;
+                 background:linear-gradient(to top,lightblue,blue); z-index:25;">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-top:5px; margin-left:20%;">
+                            <label style="color:white">Descrição</label>
+                            @Html.Editor("NomeProduto", new { htmlAttributes = new { @type = "text", @size = "60" } })
+                        </div>
+                        <div style="margin-top:5px; margin-left:70%;left:70%">
+                            <input type="button" style="font-weight:bold; color:white; background-color:black" value="Buscar" class="btn btn-xs sombra" id="BtnBuscarProd" />
+                            <input type="button" style="font-weight:bold; color:yellow;background-color:black" value="Fechar" class="btn btn-xs sombra" id="BtnFecharProd" />
+                        </div>
+                    </div>
+                    <div class="row" id="gridProd" style="margin-left:10px;border-radius:15%;">
+                    </div>
+                </div>
+                <div class='overlay' style="z-index:24"></div>
+           </div>
+            <br /><br /><br /><br /><br />
+            <div style="text-align:center;margin-left:-30PX;">
+                <input type="button" id="btnSalvarItemNF" value="Salvar" onclick="SalvarItemNF();" class="btn btn-success sombra" />
+                <input type="button" id="btnFecharTelaItemNF" value="Fechar" onclick="FecharTelaItemNF();" class="btn btn-default sombra"
+                       style="background-color:lightslategray;" />
+            </div>
+        </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+
+    jQuery(function ($) {
+        $('#ProdutoID').mask('999999');
+        $('#QtItem').mask('999999');
+
+        $('#ProdutoID').focusout(function () {
+            var Id, element;
+            element = $(this);
+            element.unmask();
+            Id = element.val().replace(/\D/g, '').trim();
+            if (Id > 0) {
+                $('#NomeProduto').val('');
+                BuscarProdutos();
+                element.val(ajustarZeros(element.val(), 6));
+                element.mask('999999');
+            }
+        });
+
+        $('#QtItem').change(function () {
+            var QTD, element, valor;
+            element = $(this);
+            QTD = parseInt(element.val().replace(/\D/g, '').trim());
+            if (QTD > 0) {
+                valor = parseFloat($('#Produto_vlPreco').val()) * QTD;
+                $('#VlItem').val(valor);
+                $('#VlTotalFormatado').val(formataReal(valor));
+            }
+        });
+
+        $('#BtnPesqProduto').click(function () {
+            $("#gridProd").load(null);
+            $('#DvPesqProduto').css('display', 'inline');
+            $('#DvPesqProduto').css('visibility', 'visible');
+        })
+
+        $('#BtnBuscarProd').click(function () {
+            BuscarProdutos();
+        })
+
+        $('#BtnFecharProd').click(function () {
+            $('#DvPesqProduto').css('visibility', 'hidden');
+            $('#DvPesqProduto').css('display', 'none');
+        })
+
+        /*
+        $("#gridProd td:first-child").click(function () {
+            //var value = $(this).closest('tr').find('td:eq(2)').text(); // for third column
+            alert("teste");
+            var resultArray = $(this).closest('tr').find('td').map(function () {
+                return $(this).text();
+            }).get();
+
+            alert(resultArray[0]);
+            alert(resultArray[1]);
+        });
+        */
+
+    })
+
+</script>

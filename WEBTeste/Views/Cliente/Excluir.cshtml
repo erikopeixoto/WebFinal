@@ -1,0 +1,52 @@
+﻿@model Modelos.Cliente
+
+@{
+    ViewBag.Title = "Excluir Cliente";
+}
+
+<h2>@ViewBag.Title</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NmCliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NmCliente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DsEndereco)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DsEndereco)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NuCnpjCpf)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NuCnpjCpf)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DtCriacao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DtCriacao)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" />
+            @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

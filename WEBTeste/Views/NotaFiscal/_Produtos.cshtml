@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Modelos.Produto>
+
+
+@{
+    WebGrid gridProd = new WebGrid(Model,
+                               rowsPerPage: 4,
+                               canPage: true,
+                               ajaxUpdateContainerId: "gridProd");
+}
+<div id="gridProd">
+    @gridProd.GetHtml(tableStyle: "gridTablePesq",
+                 headerStyle: "gridHeadPesq",
+                 footerStyle: "gridFooterPesq",
+                 rowStyle: "gridRowPesq",
+                 alternatingRowStyle: "gridAltRowPesq",
+                 mode: WebGridPagerModes.All,
+                 firstText: "<<",
+                 previousText: "<",
+                 nextText: ">",
+                 lastText: ">>",
+                 columns: new[]
+                          {gridProd.Column("nmProduto",header: "Nome",format: (item) =>
+                              new HtmlString("<a href='#' id='nmProduto' onclick='atualizarProduto(" + item.ID + ","+
+                                                                                                       Json.Encode(item.nmProduto) + "," +
+                                                                                                       Json.Encode(item.Unidade.DsUnidade) + "," +
+                                                                                                       Json.Encode(item.Unidade.SgUnidade) + "," +
+                                                                                                       Json.Encode(item.vlPreco) + ");'>" +
+                              Html.Encode(item.nmProduto) + "</a>")),
+                           gridProd.Column("VlPreco","Valor", canSort: false),
+                           gridProd.Column(format: @<text><input type="hidden" id="ID" value="@item.ID" /></text>),
+                           gridProd.Column(format: @<text><input type="hidden" id="Unidade" value="@item.Unidade.DsUnidade" /></text>)})
+</div>

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Modelos.Categoria>
+
+@{
+    ViewBag.Title = "Categorias";
+}
+<h3>@ViewBag.Title</h3>
+
+<table class="table table-bordered">
+    <caption>Lista de Categorias</caption>
+    <thead>
+        <tr>
+            <th width="700">
+                @Html.DisplayNameFor(model => model.NmCategoria)
+            </th>
+            <th colspan="4">Funções</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NmCategoria)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+            </td>
+            <td>
+                @Html.ActionLink("Detalhe", "Details", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+            </td>
+            <td>
+                @Html.ActionLink("Excluir", "Delete", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+            </td>
+            <td>
+                @Html.ActionLink("Produtos", "Produto", new { Pid = item.ID, Pnome = item.NmCategoria }, new { @class = "btn btn-default btn-sm" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div>
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.Pages; i++)
+        {
+            if (ViewBag.Pages > 1)
+            {
+                if (ViewBag.Page == i)
+                {
+                    <li class="pages"><span class="page active">@i</span></li>
+                }
+                else
+                {
+                    <li class="pages">@Html.ActionLink(i.ToString(), "Index", new { pagina = i }, new { @class = "page" })</li>
+                }
+            }
+        }
+    </ul>
+</div>
+
+<p>
+    @Html.ActionLink("Incluir", "Create", null, new { @class = "btn btn-default btn-lg" })
+</p>

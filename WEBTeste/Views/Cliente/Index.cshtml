@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Modelos.Cliente>
+
+@{
+    ViewBag.Title = "Cliente";
+}
+
+<h2>@ViewBag.Title</h2>
+<table class="table table-bordered">
+    <caption>Lista de Clientes</caption>
+    <thead>
+        <tr>
+            <th width="220">
+                @Html.DisplayNameFor(model => model.NmCliente)
+            </th>
+            <th width="220">
+                @Html.DisplayNameFor(model => model.DsEndereco)
+            </th>
+            <th width="90">
+                @Html.DisplayNameFor(model => model.NuCep)
+            </th>
+            <th width="45">
+                @Html.DisplayNameFor(model => model.TpCliente)
+            </th>
+            <th width="140">
+                @Html.DisplayNameFor(model => model.NuCnpjCpf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NuTelefone)
+            </th>
+            <th width="100">
+                @Html.DisplayNameFor(model => model.DtCriacao)
+            </th>
+            <th colspan="3">Funções</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NmCliente)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DsEndereco)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(modelItem => item.NuCep)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TpCliente)
+                </td>
+                <td align="center">
+                    @Html.ValueFor(modelItem => item.CPFCNPJFormatado)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(modelItem => item.NuTelefone)
+                </td>
+               <td align="center">
+                    @Html.ValueFor(modelItem =>item.DtCriacao, "{0:dd/MM/yyyy}")
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+                </td>
+                <td>
+                    @Html.ActionLink("Detalhe", "Detalhe", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+                </td>
+                <td>
+                    @Html.ActionLink("Excluir", "Excluir", new { Pid = item.ID }, new { @class = "btn btn-default btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<div>
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.Pages; i++)
+        {
+            if (ViewBag.Pages > 1)
+            {
+                if (ViewBag.Page == i)
+                {
+                    <li class="pages"><span class="page active">@i</span></li>
+                }
+                else
+                {
+                    <li class="pages">@Html.ActionLink(i.ToString(), "Index", new { pagina = i }, new { @class = "page" })</li>
+                }
+            }
+        }
+    </ul>
+</div>
+<div class="h4">
+    @Html.ActionLink("Incluir", "Incluir", null, new { @class = "btn btn-default btn-lg" })
+</div>
